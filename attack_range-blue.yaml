@@ -1,0 +1,89 @@
+ludus:
+  - vm_name: "{{ range_id }}-ar-splunk"
+    hostname: "ar-splunk"
+    template: ubuntu-22.04-x64-server-template
+    vlan: 20
+    ip_last_octet: 10
+    ram_gb: 16
+    cpus: 8
+    linux: true
+    roles:
+      - p4t12ick.ludus_ar_splunk
+    role_vars:
+      ludus_splunk_apps:
+        - splunk-add-on-for-microsoft-windows_901.tgz
+        - splunk-add-on-for-sysmon-for-linux_100.tgz
+        - splunk-add-on-for-sysmon_402.tgz
+        - splunk-add-on-for-unix-and-linux_1000.tgz
+        - splunk-common-information-model-(cim)_602.tgz
+        - DA-ESS-ContentUpdate-latest.tar.gz
+        - TA-aurora-0.2.0.tar.gz 
+
+  - vm_name: "{{ range_id }}-ar-linux"
+    hostname: "ar-linux"
+    template: ubuntu-22.04-x64-server-template
+    vlan: 20
+    ip_last_octet: 11
+    ram_gb: 4
+    cpus: 2
+    linux: true
+    roles:
+      - p4t12ick.ludus_ar_linux
+    role_vars:
+      ludus_ar_linux_splunk_ip: "10.5.20.10"
+
+  - vm_name: "{{ range_id }}-ar-zeek"
+    hostname: "ar-zeek"
+    template: ubuntu-22.04-x64-server-template
+    vlan: 20
+    ip_last_octet: 12
+    ram_gb: 8
+    cpus: 4
+    linux: true
+    roles:
+      - ludus_ar_zeek # Temporary fork of P4T12ICK.ludus_ar_zeek
+    role_vars:
+      ludus_ar_zeek_splunk_ip: "10.5.20.10"
+
+  - vm_name: "{{ range_id }}-ar-win-dc"
+    hostname: "ar-win-dc"
+    template: win2022-server-x64-template
+    vlan: 20
+    ip_last_octet: 20
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+    domain:
+      fqdn: ludus.lab
+      role: primary-dc
+    roles:
+      - p4t12ick.ludus_ar_windows
+      - frack113.ludus_aurora_agent
+      - ludus_badblood # Temporary fork 
+    role_vars:
+      ludus_ar_windows_splunk_ip: "10.5.20.10"
+      ludus_aurora_splunk_forwarder: true
+      ludus_aurora_json_logging: true
+      ludus_aurora_dashboard: true
+
+  - vm_name: "{{ range_id }}-ar-win-mem"
+    hostname: "ar-win-2"
+    template: win2022-server-x64-template
+    vlan: 20
+    ip_last_octet: 21
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+    domain:
+      fqdn: ludus.lab
+      role: member
+    roles:
+      - p4t12ick.ludus_ar_windows
+      - frack113.ludus_aurora_agent
+    role_vars:
+      ludus_ar_windows_splunk_ip: "10.5.20.10"
+      ludus_aurora_splunk_forwarder: true
+      ludus_aurora_json_logging: true
+      ludus_aurora_dashboard: true

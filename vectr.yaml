@@ -1,0 +1,19 @@
+ludus:
+  - vm_name: "{{ range_id }}-vectr-ubuntu2204-x64"
+    hostname: "{{ range_id }}-vectr"
+    template: ubuntu-22.04-x64-server-template
+    vlan: 10
+    ip_last_octet: 10
+    ram_gb: 8
+    cpus: 4
+    linux: true
+    roles:
+      - 5tuk0v.ludus_vectr
+    role_vars:
+      ludus_vectr_hostname: "vectr.{{ range_id }}.local"
+      ludus_vectr_port: 8081
+      ludus_vectr_postgres_password: "MySecurePassword123!"
+      ludus_vectr_redis_password: "MySecureRedis456!"
+      ludus_vectr_data_key: "MySecureDataKey456!"
+      ludus_vectr_jws_key: "MySecureJWSKey789!"
+      ludus_vectr_jwe_key: "MySecureJWEKey012!"

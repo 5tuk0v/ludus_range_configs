@@ -1,0 +1,14 @@
+ludus:
+  - vm_name: "{{ range_id }}-gw-ubuntu2204-x64"
+    hostname: "{{ range_id }}-gw"
+    template: ubuntu-22.04-x64-server-template
+    vlan: 10
+    ip_last_octet: 10
+    ram_gb: 3
+    cpus: 2
+    linux: true
+    roles:
+      - 5tuk0v.ludus_ghostwriter
+    role_vars:
+      ludus_ghostwriter_install_path: "/opt/ghostwriter"
+      ludus_ghostwriter_development_mode: false

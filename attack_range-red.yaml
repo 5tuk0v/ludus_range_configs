@@ -1,0 +1,77 @@
+ludus:
+  - vm_name: "{{ range_id }}-vectr-ubuntu2204-x64"
+    hostname: "{{ range_id }}-vectr"
+    template: ubuntu-22.04-x64-server-template
+    vlan: 10
+    ip_last_octet: 10
+    ram_gb: 8
+    cpus: 4
+    linux: true
+    roles:
+      - 5tuk0v.ludus_vectr
+    role_vars:
+      ludus_vectr_hostname: "vectr.{{ range_id }}.local"
+      ludus_vectr_port: 8081
+      ludus_vectr_postgres_password: "MySecurePassword123!"
+      ludus_vectr_redis_password: "MySecureRedis456!"
+      ludus_vectr_data_key: "MySecureDataKey456!"
+      ludus_vectr_jws_key: "MySecureJWSKey789!"
+      ludus_vectr_jwe_key: "MySecureJWEKey012!"
+
+  - vm_name: "{{ range_id }}-caldera-debian12-x64"
+    hostname: "{{ range_id }}-caldera"
+    template: debian-12-x64-server-template
+    vlan: 10
+    ip_last_octet: 11
+    ram_gb: 8
+    cpus: 2
+    linux: true
+    roles:
+      - frack113.ludus_caldera_server
+    role_vars:
+      ludus_caldera_admin_pwd: 'SuperPassword'
+
+  - vm_name: "{{ range_id }}-mythic-ubuntu2204-x64"
+    hostname: "{{ range_id }}-mythic"
+    template: ubuntu-22.04-x64-server-template
+    vlan: 10
+    ip_last_octet: 12
+    ram_gb: 4
+    cpus: 2
+    linux: true
+    roles:
+      - ludus_mythic_teamserver # temporary fork of 0xRedpoll.ludus_mythic_teamserver until PR is merged
+    role_vars:
+      mythic_agents:
+        - name: http
+          url: "https://github.com/MythicC2Profiles/http"
+        - name: smb
+          url: "https://github.com/MythicC2Profiles/smb"
+        - name: tcp
+          url: "https://github.com/MythicC2Profiles/tcp"
+        - name: httpx
+          url: "https://github.com/MythicC2Profiles/httpx"
+        - name: apollo
+          url: "https://github.com/MythicAgents/apollo"
+        - name: xenon
+          url: "https://github.com/MythicAgents/xenon"
+        - name: forge
+          url: "https://github.com/MythicAgents/forge"
+        - name: vectr
+          url: "https://github.com/MythicAgents/vectr"
+  
+# Optional - Ghostwriter for project tracking and report writing
+# Probably less useful for Purples, but might be for Red teams
+  - vm_name: "{{ range_id }}-gw-ubuntu2204-x64"
+    hostname: "{{ range_id }}-gw"
+    template: ubuntu-22.04-x64-server-template
+    vlan: 10
+    ip_last_octet: 13
+    ram_gb: 3
+    cpus: 2
+    linux: true
+    roles:
+      - 5tuk0v.ludus_ghostwriter
+    role_vars:
+      ludus_ghostwriter_install_path: "/opt/ghostwriter"
+      ludus_ghostwriter_development_mode: true

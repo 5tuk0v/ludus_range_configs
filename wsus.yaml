@@ -1,0 +1,77 @@
+ludus:
+  - vm_name: "{{ range_id }}-ad-dc-win2022-server-x64"
+    hostname: "{{ range_id }}-dc01"
+    template: win2022-server-x64-template
+    vlan: 10
+    ip_last_octet: 11
+    ram_gb: 8
+    cpus: 4
+    windows:
+      sysprep: true
+    domain:
+      fqdn: ludus.lab
+      role: primary-dc
+    roles:
+      - ludus-ad-content
+      - badsectorlabs.ludus_mssql
+    role_vars:
+      ludus_ad:
+        ous:
+          - name: ADLabStuff
+            path: DC=ludus,DC=lab
+            description: Custom ADLab objects
+        groups:
+          - name: SQLAdmins
+            scope: global
+            path: OU=ADLabStuff,DC=ludus,DC=lab
+            description: Sysadmin role in MSSQL
+        users:
+          - name: bob
+            firstname: Bob
+            surname: Dylan
+            display_name: Bob Dylan
+            password: Password123
+            path: OU=ADLabStuff,DC=ludus,DC=lab
+            description: Regular user
+            groups:
+              - Domain Users
+          - name: alice
+            firstname: Alice
+            surname: Morissette
+            display_name: Alice Morissette
+            password: Password123
+            path: OU=ADLabStuff,DC=ludus,DC=lab
+            description: SQL Admin
+            groups:
+              - SQLAdmins
+          - name: svc_mssql
+            firstname:
+            surname:
+            display_name: svc_mssql
+            password: Password123
+            path: OU=ADLabStuff,DC=ludus,DC=lab
+            description: SQL Service Account
+            groups:
+              - Domain Users
+      ludus_mssql_version: "2022"
+      ludus_mssql_iso_url: "https://archive.org/download/microsoft-sql-server-2022-x64-enu-evaluation/SQLServer2022-x64-ENU.iso"
+      ludus_mssql_iso_checksum: "sha256:342fc9f4b89eaa50a0d1ef0d30470ea7b6af91b425c26023461198cb4e925b4f"
+	  
+  - vm_name: "{{ range_id }}-ad-sql-win2022-server-x64"
+    hostname: "{{ range_id }}-ad-sql01"
+    template: win2022-server-x64-template
+    vlan: 10
+    ip_last_octet: 12
+    ram_gb: 8
+    cpus: 4
+    windows:
+      sysprep: true
+    domain:
+      fqdn: ludus.lab
+      role: member
+    roles:
+      - badsectorlabs.ludus_mssql
+    role_vars:
+      ludus_mssql_version: "2022"
+      ludus_mssql_iso_url: "https://archive.org/download/microsoft-sql-server-2022-x64-enu-evaluation/SQLServer2022-x64-ENU.iso"
+      ludus_mssql_iso_checksum: "sha256:342fc9f4b89eaa50a0d1ef0d30470ea7b6af91b425c26023461198cb4e925b4f"

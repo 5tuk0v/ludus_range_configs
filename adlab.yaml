@@ -1,0 +1,43 @@
+ludus:
+  - vm_name: "{{ range_id }}-dc-win2022-server-x64"
+    hostname: "{{ range_id }}-dc01"
+    template: win2022-server-x64-template
+    vlan: 10
+    ip_last_octet: 10
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+    domain:
+      fqdn: ad.lab
+      role: primary-dc
+
+  - vm_name: "{{ range_id }}-srv01-win2016-server-x64"
+    hostname: "{{ range_id }}-srv01"
+    template: win2016-server-x64-template
+    vlan: 10
+    ip_last_octet: 11
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+    domain:
+      fqdn: ad.lab
+      role: member
+    roles:
+      - 5tuk0v.ludus_wsus
+
+  - vm_name: "{{ range_id }}-srv02-win2019-server-x64"
+    hostname: "{{ range_id }}-srv02"
+    template: win2019-server-x64-template
+    vlan: 10
+    ip_last_octet: 12
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+    domain:
+      fqdn: ad.lab
+      role: member
+    roles:
+      - 5tuk0v.ludus_wsus
