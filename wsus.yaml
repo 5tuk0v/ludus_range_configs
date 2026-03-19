@@ -1,6 +1,19 @@
 ludus:
-  - vm_name: "{{ range_id }}-dc-win2022-server-x64"
-    hostname: "{{ range_id }}-dc01"
+  - vm_name: '{{ range_id }}-dc-win2022'
+    hostname: '{{ range_id }}-DC01'
+    template: win2022-server-x64-template
+    vlan: 10
+    ip_last_octet: 10
+    ram_gb: 4
+    cpus: 2
+    windows:
+      sysprep: true
+    domain:
+      fqdn: ludus.lab
+      role: primary-dc
+
+  - vm_name: '{{ range_id }}-wsus-win2022'
+    hostname: '{{ range_id }}-WSUS01'
     template: win2022-server-x64-template
     vlan: 10
     ip_last_octet: 11
@@ -10,25 +23,33 @@ ludus:
       sysprep: true
     domain:
       fqdn: ludus.lab
-      role: primary-dc
+      role: member
+    roles:
+      - 5tuk0v.ludus_wsus
 
-  - vm_name: "{{ range_id }}-wsus-win2022-server-x64"
-    hostname: "{{ range_id }}-wsus"
-    template: win2022-server-x64-template
+  - vm_name: '{{ range_id }}-win11-24h2'
+    hostname: '{{ range_id }}-WS01'
+    template: win11-24h2-x64-enterprise-tpm-template
     vlan: 10
-    ip_last_octet: 12
-    ram_gb: 4
-    cpus: 2
+    ip_last_octet: 20
+    ram_gb: 8
+    cpus: 4
     windows:
       sysprep: true
     domain:
       fqdn: ludus.lab
       role: member
-    roles:
-      - 5tuk0v.ludus_wsus
-    role_vars:
-      ludus_wsus_products_list:
-        - 'Microsoft Server operating system-21H2'
-      ludus_wsus_classifications_list:
-        - 'Critical Updates'
-        - 'Security Updates'
+
+  - vm_name: '{{ range_id }}-kali'
+    hostname: '{{ range_id }}-kali'
+    template: kali-x64-desktop-template
+    vlan: 10
+    ip_last_octet: 21
+    ram_gb: 4
+    cpus: 2
+    linux: true
+    testing:
+      snapshot: false
+      block_internet: false
+network:
+    wireguard_vlan_default: ACCEPT
