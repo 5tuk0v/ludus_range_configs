@@ -67,11 +67,11 @@ ludus:
     template: ubuntu-22.04-x64-server-template
     vlan: 10
     ip_last_octet: 13
-    ram_gb: 3
+    ram_gb: 2
     cpus: 2
     linux: true
     roles:
       - 5tuk0v.ludus_ghostwriter
     role_vars:
       ludus_ghostwriter_install_path: "/opt/ghostwriter"
-      ludus_ghostwriter_development_mode: true
+      ludus_ghostwriter_development_mode: false
