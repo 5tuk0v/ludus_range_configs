@@ -1,6 +1,11 @@
+# Allow callbacks to wireguard hosts, for relaying 
+network:
+  wireguard_vlan_default: ACCEPT
+
 ludus:
-  - vm_name: "{{ range_id }}-DC01"
-    hostname: "DC01"
+# Domain controller, running ADDS and ADCS
+  - vm_name: '{{ range_id }}-DC01'
+    hostname: DC01
     template: win2022-server-x64-template
     vlan: 10
     ip_last_octet: 10
@@ -16,9 +21,10 @@ ludus:
       - synzack.ludus_sccm.install_adcs
       - synzack.ludus_sccm.disable_firewall
 
-  - vm_name: "{{ range_id }}-Workstation"
-    hostname: "WS01"
-    template: win11-22h2-x64-enterprise-template
+# Workstation 
+  - vm_name: '{{ range_id }}-WS01'
+    hostname: WS01
+    template: win11-24h2-x64-enterprise-tpm-template
     vlan: 10
     ip_last_octet: 11
     ram_gb: 4
@@ -32,8 +38,9 @@ ludus:
     roles:
       - synzack.ludus_sccm.disable_firewall
 
-  - vm_name: "{{ range_id }}-distro"
-    hostname: "SCCM-DISTRO"
+# Distribution point
+  - vm_name: '{{ range_id }}-DP01'
+    hostname: DP01
     template: win2022-server-x64-template
     vlan: 10
     ip_last_octet: 12
@@ -48,10 +55,11 @@ ludus:
     roles:
       - synzack.ludus_sccm.ludus_sccm_distro
     role_vars:
-      ludus_sccm_site_server_hostname: 'sccm-sitesrv' 
+      ludus_sccm_site_server_hostname: SITESRV
 
-  - vm_name: "{{ range_id }}-sql"
-    hostname: "SCCM-DB"
+# Site database dedicated server, running as sqlsccmsvc
+  - vm_name: '{{ range_id }}-SITEDB'
+    hostname: SITEDB
     template: win2022-server-x64-template
     vlan: 10
     ip_last_octet: 13
@@ -66,13 +74,14 @@ ludus:
     roles:
       - synzack.ludus_sccm.ludus_sccm_sql
     role_vars:
-      ludus_sccm_site_server_hostname: 'SCCM-SITESRV'    
-      ludus_sccm_sql_server_hostname: 'SCCM-DB'         
-      ludus_sccm_sql_svc_account_username: 'sqlsccmsvc'  
-      ludus_sccm_sql_svc_account_password: 'Password123' 
+      ludus_sccm_site_server_hostname: SITESRV
+      ludus_sccm_sql_server_hostname: SITEDB
+      ludus_sccm_sql_svc_account_username: sqlsccmsvc
+      ludus_sccm_sql_svc_account_password: Password123
 
-  - vm_name: "{{ range_id }}-mgmt"
-    hostname: "SCCM-MGMT"
+# Management point 
+  - vm_name: '{{ range_id }}-MP01'
+    hostname: MP01
     template: win2022-server-x64-template
     vlan: 10
     ip_last_octet: 14
@@ -87,10 +96,11 @@ ludus:
     roles:
       - synzack.ludus_sccm.ludus_sccm_mgmt
     role_vars:
-      ludus_sccm_site_server_hostname: "SCCM-SITESRV" 
+      ludus_sccm_site_server_hostname: SITESRV
 
-  - vm_name: "{{ range_id }}-sitesrv"
-    hostname: "SCCM-SITESRV" 
+# Primary site server, running all roles, with client push and NAA configured
+  - vm_name: '{{ range_id }}-SITESRV'
+    hostname: SITESRV
     template: win2022-server-x64-template
     vlan: 10
     ip_last_octet: 15
@@ -106,44 +116,39 @@ ludus:
       - synzack.ludus_sccm.ludus_sccm_siteserver
       - synzack.ludus_sccm.enable_webdav
     role_vars:
-      ludus_sccm_sitecode: 123           
-      ludus_sccm_sitename: Primary Site  
-      ludus_sccm_site_server_hostname: 'SCCM-SITESRV'  
-      ludus_sccm_distro_server_hostname: 'SCCM-DISTRO' 
-      ludus_sccm_mgmt_server_hostname: 'SCCM-MGMT'     
-      ludus_sccm_sql_server_hostname: 'SCCM-DB'       
-      # --------------------------NAA Account-------------------------------------------------
+      ludus_sccm_sitecode: 123
+      ludus_sccm_sitename: Primary Site
+      ludus_sccm_site_server_hostname: SITESRV
+      ludus_sccm_distro_server_hostname: DP01
+      ludus_sccm_mgmt_server_hostname: MP01
+      ludus_sccm_sql_server_hostname: SITEDB
       ludus_sccm_configure_naa: true
-      ludus_sccm_naa_username: 'sccm_naa'
-      ludus_sccm_naa_password: 'Password123'
-      # --------------------------Client Push Account-----------------------------------------
+      ludus_sccm_naa_username: sccm_naa
+      ludus_sccm_naa_password: Password123
       ludus_sccm_configure_client_push: true
-      ludus_sccm_client_push_username: 'sccm_push'
-      ludus_sccm_client_push_password: 'Password123'
+      ludus_sccm_client_push_username: sccm_push
+      ludus_sccm_client_push_password: Password123
       ludus_sccm_enable_automatic_client_push_installation: true
       ludus_sccm_enable_system_type_configuration_manager: true
       ludus_sccm_enable_system_type_server: true
       ludus_sccm_enable_system_type_workstation: true
-      ludus_sccm_install_client_to_domain_controller: false  #"True" Requires Remote Scheduled Tasks Managmenet firewall rules enabled (or no firewall)
+      ludus_sccm_install_client_to_domain_controller: false
       ludus_sccm_allow_NTLM_fallback: true
-      # ---------------------------Discovery Methods------------------------------------------
       ludus_sccm_enable_active_directory_forest_discovery: true
       ludus_sccm_enable_active_directory_boundary_creation: true
       ludus_sccm_enable_subnet_boundary_creation: true
       ludus_sccm_enable_active_directory_group_discovery: true
       ludus_sccm_enable_active_directory_system_discovery: true
       ludus_sccm_enable_active_directory_user_discovery: true
-      # ----------------------------------PXE-------------------------------------------------
       ludus_sccm_enable_pxe: true
       ludus_enable_pxe_password: false
-      ludus_pxe_password: 'Password123'
+      ludus_pxe_password: Password123
       ludus_domain_join_account: domainadmin
-      ludus_domain_join_password: 'password'
+      ludus_domain_join_password: password
 
-
-# extra VM for testing service account coercion and relaying to SQL and SCCM services
-  - vm_name: "{{ range_id }}-sql-standalone"
-    hostname: "SQL01"
+# Extra standalone SQL server, running as a service account 
+  - vm_name: '{{ range_id }}-SQL01'
+    hostname: SQL01
     template: win2022-server-x64-template
     vlan: 10
     ip_last_octet: 16
@@ -158,10 +163,29 @@ ludus:
       - badsectorlabs.ludus_mssql
       - synzack.ludus_sccm.disable_firewall
     role_vars:
-      ludus_mssql_version: "2022"
-      ludus_mssql_iso_url: "https://archive.org/download/microsoft-sql-server-2022-x64-enu-evaluation/SQLServer2022-x64-ENU.iso"
-      ludus_mssql_iso_checksum: "sha256:342fc9f4b89eaa50a0d1ef0d30470ea7b6af91b425c26023461198cb4e925b4f"
+      ludus_mssql_version: '2022'
+      ludus_mssql_iso_url: >-
+        https://archive.org/download/microsoft-sql-server-2022-x64-enu-evaluation/SQLServer2022-x64-ENU.iso
+      ludus_mssql_iso_checksum: sha256:342fc9f4b89eaa50a0d1ef0d30470ea7b6af91b425c26023461198cb4e925b4f
 
-# allow traffic to wireguard for coercion and relaying tests
-network:
-    wireguard_vlan_default: ACCEPT
+# Extra standalone SQL server, running as SYSTEM
+  - vm_name: '{{ range_id }}-SQL02'
+    hostname: SQL02
+    template: win2022-server-x64-template
+    vlan: 10
+    ip_last_octet: 17
+    ram_gb: 4
+    cpus: 4
+    windows:
+      sysprep: true
+    domain:
+      fqdn: ludus.domain
+      role: member
+    roles:
+      - badsectorlabs.ludus_mssql
+      - synzack.ludus_sccm.disable_firewall
+    role_vars:
+      ludus_mssql_version: '2022'
+      ludus_mssql_iso_url: >-
+        https://archive.org/download/microsoft-sql-server-2022-x64-enu-evaluation/SQLServer2022-x64-ENU.iso
+      ludus_mssql_iso_checksum: sha256:342fc9f4b89eaa50a0d1ef0d30470ea7b6af91b425c26023461198cb4e925b4f
