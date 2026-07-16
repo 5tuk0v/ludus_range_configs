@@ -1,0 +1,7 @@
+manifest_version: 1
+name: "5tuk0v ludus_range_configs"
+description: "Pre-built Ludus lab configurations for realistic red, blue, and purple team exercises."
+authors:
+  - "5tuk0v"
+homepage: https://github.com/5tuk0v/ludus_range_configs
+license: MIT License

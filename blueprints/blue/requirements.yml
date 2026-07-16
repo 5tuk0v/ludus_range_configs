@@ -1,0 +1,63 @@
+# requirements.yml: every role and collection this blueprint depends on.
+#
+# This mirrors the standard ansible-galaxy requirements file format. Refer to
+# the upstream docs for the authoritative spec:
+#   Roles:               https://docs.ansible.com/ansible/latest/galaxy/user_guide.html#installing-roles-from-a-requirements-file
+#   Collections:         https://docs.ansible.com/ansible/latest/collections_guide/collections_installing.html#install-multiple-collections-with-a-requirements-file
+#   Collections via git: https://docs.ansible.com/ansible/latest/collections_guide/collections_installing.html#installing-a-collection-from-a-git-repository
+#
+# Three sections are recognized; all are optional. List every role referenced
+# under `roles:` in range-config.yml here (or bundle it locally under roles/),
+# otherwise Ludus will surface an undeclared-dependency warning at sync time.
+#
+#   roles:               ansible-galaxy roles (galaxy.ansible.com or a git repo)
+#   collections:         ansible-galaxy collections; required for any
+#                        3-part FQCN role reference (`namespace.collection.role`)
+#   subscription_roles:  license-gated roles served from the Ludus catalog.
+#                        Names only -- version pinning is not currently supported;
+#                        whatever the catalog reports as current is installed.
+#
+# IMPORTANT: roles and collections use DIFFERENT keys for git sources.
+#   - A git ROLE       puts the URL in `src:`  and the SCM in `scm:`.
+#   - A git COLLECTION puts the URL in `name:` and sets `type: git`.
+# (`source:` on a collection points at an alternate Galaxy server, NOT a git
+# repo -- using it for a git URL will fail to install.)
+
+roles:
+  - name: p4t12ick.ludus_ar_splunk
+    src: https://github.com/p4t12ick/ludus_ar_splunk
+
+  - name: p4t12ick.ludus_ar_linux
+    src: https://github.com/p4t12ick/ludus_ar_linux
+
+  - name: 5tuk0v.ludus_ar_zeek
+    src: https://github.com/5tuk0v/ludus_ar_zeek
+
+  - name: p4t12ick.ludus_ar_windows
+    src: https://github.com/p4t12ick/ludus_ar_windows
+
+  - name: frack113.ludus_aurora_agent
+    src: https://github.com/frack113/ludus_aurora_agent
+
+  - name: 5tuk0v.ludus_badblood
+    src: https://github.com/5tuk0v/ludus_badblood
+
+# collections:
+#   # Galaxy collection. Required when range-config.yml references a 3-part
+#   # FQCN role like `community.crypto.openssl_certificate` -- the parent
+#   # collection must be declared here.
+#   - name: community.crypto
+#     version: 2.16.0
+#
+#   # Collection from a git repo: the repo URL goes in `name:` and `type: git`
+#   # must be set explicitly. `version:` is any commit-ish (branch / tag /
+#   # commit). Do NOT use `source:` for the git URL -- that key is for alternate
+#   # Galaxy servers.
+#   - name: https://github.com/foo/my-collection.git
+#     type: git
+#     version: main
+
+# subscription_roles:
+#   # Both shapes accepted:
+#   - ludus_ghosts_client          # bare scalar
+#   - name: ludus_adcs             # structured form
