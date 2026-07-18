@@ -1,0 +1,6 @@
+roles:
+  - name: Cyblex-Consulting.ludus-ad-content
+    src: https://github.com/Cyblex-Consulting/ludus-ad-content
+
+  - name: badsectorlabs.ludus_mssql
+    src: https://github.com/badsectorlabs/ludus_mssql
