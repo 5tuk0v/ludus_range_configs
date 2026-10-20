@@ -1,7 +1,7 @@
 # blueprint.yml: display metadata for one blueprint.
 
 manifest_version: 1                                                          # required: schema version, leave as 1
-id: blue-lab-5tuk0v                                                          # required: unique within this source; lowercase, dashes
+id: blue                                                                     # required: unique within this source; lowercase, dashes
 name: "blue-lab"                                                             # required: display name
 description: "AD detection lab with Windows domain infrastructure, Splunk SIEM, Zeek monitoring and Sysmon/Aurora telemetry collection." # required
 version: 0.1.0                                                               # required: your semver; bump on every release

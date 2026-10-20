@@ -1,5 +1,5 @@
 manifest_version: 1
-id: multi-tool-red-team
+id: mssql
 name: "Multi-Tool Red Team Lab"
 description: "A modern offensive operations lab that deploys Vectr, Caldera, Mythic, and Ghostwriter to support adversary simulation, command-and-control, and reporting workflows."
 version: 0.1.0

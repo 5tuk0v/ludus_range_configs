@@ -1,5 +1,5 @@
 manifest_version: 1
-id: sccm-lab
+id: sccmlab
 name: "SCCM Lab"
 description: "A Microsoft Configuration Manager lab with domain services, site roles, SQL-backed infrastructure, and client management components for enterprise administration exercises."
 version: 0.1.0
