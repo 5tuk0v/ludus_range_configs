@@ -12,7 +12,7 @@ ludus:
       fqdn: ludus.lab
       role: primary-dc
     roles:
-      - ludus-ad-content
+      - Cyblex-Consulting.ludus-ad-content
       - badsectorlabs.ludus_mssql
     role_vars:
       ludus_ad:

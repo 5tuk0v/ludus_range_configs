@@ -1,0 +1,7 @@
+manifest_version: 1
+id: adlab
+name: "ADLab MSSQL"
+description: "An Active Directory lab that combines Microsoft SQL Server with custom AD objects for realistic identity, privilege, and database-focused scenarios."
+version: 0.1.0
+config: range-config.yml
+tags: [adlab, active-directory, mssql]

@@ -1,0 +1,7 @@
+manifest_version: 1
+id: red
+name: "Red Team Operations Lab"
+description: "A red-team range focused on command-and-control, collaboration, and operational tooling with Vectr, Caldera, Mythic, and Ghostwriter."
+version: 0.1.0
+config: range-config.yml
+tags: [red-team, operations, c2]

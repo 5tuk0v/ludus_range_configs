@@ -1,0 +1,12 @@
+roles:
+  - name: 5tuk0v.ludus_vectr
+    src: https://github.com/5tuk0v/ludus_vectr
+
+  - name: frack113.ludus_caldera_server
+    src: https://github.com/frack113/ludus_caldera_server
+
+  - name: ludus_mythic_teamserver
+    src: https://github.com/5tuk0v/ludus_mythic_teamserver
+
+  - name: 5tuk0v.ludus_ghostwriter
+    src: https://github.com/5tuk0v/ludus_ghostwriter

@@ -1,0 +1,6 @@
+roles:
+  - name: badsectorlabs.ludus_mssql
+    src: https://github.com/badsectorlabs/ludus_mssql
+
+collections:
+  - name: synzack.ludus_sccm
